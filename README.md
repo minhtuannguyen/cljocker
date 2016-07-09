@@ -6,7 +6,7 @@
 
 [![Clojars Project](http://clojars.org/minhtuannguyen/cljocker/latest-version.svg)](https://clojars.org/minhtuannguyen/cljocker)
 
-A Simple DSL to build Dockerfile
+A simple DSL to define and generate Dockerfile
 
 ## Examples
 
@@ -14,16 +14,28 @@ A Simple DSL to build Dockerfile
 (defn- heap [heap] (str "-Xmx=" heap "m "))
 (defn- port [port] (str "-Dport=" port))
 
-(d/docker [:from "java:8"
-           :run ["mkdir" "-p" "/var/opt/folder"]
-           :user "nobody"
-           :add ["from" "to"]
-           :workdir "/var/opt/folder"
-           :cmd ["java " (heap 512) (port 512) " -jar artifact.jar"]])
+(d/docker-file [:from "java:8"
+                :run ["mkdir" "-p" "/var/opt/folder"]
+                :user "nobody"
+                :add ["from" "to"]
+                :workdir "/var/opt/folder"
+                :cmd ["java " (heap 512) (port 512) " -jar artifact.jar"]]
+                "path/to/dockerfile")         
 ```
+
+The content of path/to/dockerfile/Dockerfile will be:
+
+```shell
+FROM java:8
+RUN mkdir -p /var/opt/folder
+USER nobody
+ADD from to
+WORKDIR /var/opt/folder
+CMD java  -Xmx=512m  -Dport=512  -jar artifact.jar    
+```
+
 
 ## License
 
 Copyright © 2016 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Distributed under the Eclipse Public License
