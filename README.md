@@ -10,6 +10,9 @@ A Simple DSL to build Dockerfile
 ## Examples
 
 ```json
+(defn- java-cmd-with-heap-size [heap]
+  (str "java " "-Xmx" heap "m " "-jar " "artifact.jar"))
+
 (d/docker-file [:from "java:8"
                 :run ["mkdir" "-p" "/var/opt/folder"]
                 :user "nobody"
