@@ -1,4 +1,4 @@
-(defproject minhtuannguyen/cljocker "0.1.2"
+(defproject minhtuannguyen/cljocker "0.1.3-SNAPSHOT"
   :description "a dockerfile dsl written in clojure"
   :url ""
   :license {:name "Eclipse Public License"
