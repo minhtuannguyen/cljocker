@@ -10,16 +10,16 @@ A Simple DSL to build Dockerfile
 
 ## Examples
 
-```json
-(defn- java-cmd-with-heap-size [heap]
-  (str "java " "-Xmx" heap "m " "-jar " "artifact.jar"))
+```clojure
+(defn- heap [heap] (str "-Xmx=" heap "m "))
+(defn- port [port] (str "-Dport=" port))
 
-(d/docker-file [:from "java:8"
-                :run ["mkdir" "-p" "/var/opt/folder"]
-                :user "nobody"
-                :add ["from" "to"]
-                :workdir "/var/opt/folder"
-                :cmd (java-cmd-with-heap-size 512)])
+(d/docker [:from "java:8"
+           :run ["mkdir" "-p" "/var/opt/folder"]
+           :user "nobody"
+           :add ["from" "to"]
+           :workdir "/var/opt/folder"
+           :cmd ["java " (heap 512) (port 512) " -jar artifact.jar"]])
 ```
 
 ## License
