@@ -36,10 +36,11 @@
       m
       (conj m result))))
 
-(defn valid? [definition]
+(defn valid? [[first & rest :as definition]]
   (and (not (nil? definition))
        (even? (count definition))
-       (= :from (first definition))
+       (= :from first)
+       (= 0 (count (filter empty? (take-nth 2 rest))))
        (subset? (set (take-nth 2 definition))
                 DOCKER-INSTRUCTION)))
 

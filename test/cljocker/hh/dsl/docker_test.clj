@@ -7,16 +7,18 @@
 
 (deftest ^:unit valid?
   (is (true? (d/valid? [:from "image"])))
+  (is (false? (d/valid? [:from ""])))
   (is (false? (d/valid? [:from "image" :cmd])))
+  (is (false? (d/valid? [:from "image" :cmd ""])))
   (is (false? (d/valid? [:from "image" :bla "blub"])))
   (is (false? (d/valid? [:cmd "echo"]))))
 
 (deftest ^:unit test-docker-dsl
-  (testing "edgecase"
+  (testing "edge case"
     (is (= [] (d/docker [:from])))
     (is (= [] (d/docker []))))
 
-  (testing "happy-case"
+  (testing "happy case"
     (is (= ["FROM java:8"
             "RUN mkdir -p /var/opt/folder"
             "USER nobody"
@@ -30,7 +32,7 @@
                       :workdir "/var/opt/folder"
                       :cmd (java-cmd-with-heap-size 512)])))))
 
-(deftest ^:unit write-file
+(deftest ^:unit write-docker-file-to-disk
   (let [definition [:from "java:8"
                     :cmd (java-cmd-with-heap-size 512)]
         path "target"
