@@ -44,5 +44,8 @@
      (if (seq rest)
        (docker rest m) m))))
 
-(defn docker-file [definition]
-  (str/join "\n" (docker definition)))
+(defn docker-file [definition path]
+  (->> definition
+       (docker)
+       (str/join "\n")
+       (spit (str path "/Dockerfile"))))

@@ -14,7 +14,8 @@
                       :cmd (java-cmd-with-heap-size 512)]))))
 
   (testing "edgecase"
-    (is (= [] (d/docker [:from]))))
+    (is (= [] (d/docker [:from])))
+    (is (= [] (d/docker []))))
 
   (testing "happy-case"
     (is (= ["FROM java:8"
@@ -29,3 +30,11 @@
                       :add ["from" "to"]
                       :workdir "/var/opt/folder"
                       :cmd (java-cmd-with-heap-size 512)])))))
+
+(deftest ^:unit write-file
+  (let [definition [:from "java:8"
+                    :cmd (java-cmd-with-heap-size 512)]
+        path "target"
+        _ (d/docker-file definition path)]
+    (is (= "FROM java:8\nCMD java -Xmx512m -jar artifact.jar"
+           (slurp "target/Dockerfile")))))
