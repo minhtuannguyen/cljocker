@@ -9,8 +9,7 @@
                    :unit    :unit
                    :focused :focused
                    :all     (constantly true)}
-  :aliases {"test"         ["do" ["cljfmt" "fix"] "test"]
-            "test-refresh" ["do" ["cljfmt" "fix"] "test-refresh"]}
+  :aliases {"test-refresh" ["do" ["cljfmt" "fix"] "test-refresh"]}
   :profiles {:uberjar {:aot :all}
              :test    {:resource-paths ["test-resources"]}
              :dev     {:dependencies [[pjstadig/humane-test-output "0.8.0"]]
