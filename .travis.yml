@@ -6,5 +6,3 @@ jdk:
   - openjdk6
   - oraclejdk7
   - oraclejdk8
-after_script:
-  - bash -ex test-resources/coveralls.sh

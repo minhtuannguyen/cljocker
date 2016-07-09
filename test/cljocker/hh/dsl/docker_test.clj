@@ -2,10 +2,10 @@
   (:require [clojure.test :refer :all]
             [cljocker.hh.dsl.docker :as d]))
 
-(defn java-cmd-with-heap-size [heap]
+(defn- java-cmd-with-heap-size [heap]
   (str "java " "-Xmx" heap "m " "-jar " "artifact.jar"))
 
-(deftest ^:focused test-docker-dsl
+(deftest ^:unit test-docker-dsl
   (testing "happy-case"
     (is (= ["FROM java:8"
             "CMD java -Xmx512m -jar artifact.jar"]

@@ -18,9 +18,9 @@
 
 (defn instruction-concat [instruction v]
   (str
-    (str/upper-case (name instruction))
-    " "
-    (str/join " " v)))
+   (str/upper-case (name instruction))
+   " "
+   (str/join " " v)))
 
 (defn build-instruction [instruction v]
   (cond
