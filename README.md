@@ -1,6 +1,7 @@
 # cljocker
 [![Build Status](https://travis-ci.org/minhtuannguyen/cljocker.svg?branch=master)](https://travis-ci.org/minhtuannguyen/cljocker)
 [![Coverage Status](https://coveralls.io/repos/github/minhtuannguyen/cljocker/badge.svg?branch=master)](https://coveralls.io/github/minhtuannguyen/cljocker?branch=master)
+[![Dependencies Status](http://jarkeeper.com/minhtuannguyen/cljocker/status.svg)](http://jarkeeper.com/minhtuannguyen/cljocker)
 
 
 [![Clojars Project](http://clojars.org/minhtuannguyen/cljocker/latest-version.svg)](https://clojars.org/minhtuannguyen/cljocker)
