@@ -5,14 +5,13 @@
 (defn- java-cmd-with-heap-size [heap]
   (str "java " "-Xmx" heap "m " "-jar " "artifact.jar"))
 
-(deftest ^:unit test-docker-dsl
-  (testing "happy-case"
-    (is (= ["FROM java:8"
-            "CMD java -Xmx512m -jar artifact.jar"]
-           (d/docker [:from "java:8"
-                      :bla "blub"
-                      :cmd (java-cmd-with-heap-size 512)]))))
+(deftest ^:unit valid?
+  (is (true? (d/valid? [:from "image"])))
+  (is (false? (d/valid? [:from "image" :cmd])))
+  (is (false? (d/valid? [:from "image" :bla "blub"])))
+  (is (false? (d/valid? [:cmd "echo"]))))
 
+(deftest ^:unit test-docker-dsl
   (testing "edgecase"
     (is (= [] (d/docker [:from])))
     (is (= [] (d/docker []))))
