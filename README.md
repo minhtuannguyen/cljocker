@@ -11,15 +11,17 @@ A simple DSL to define and generate Dockerfile
 ## Examples
 
 ```clojure
+(:require [cljocker.hh.dsl.docker :as d])
+            
 (defn- heap [heap] (str "-Xmx=" heap "m "))
 (defn- port [port] (str "-Dport=" port))
 
-(d/docker-file [:from "java:8"
-                :run ["mkdir" "-p" "/var/opt/folder"]
-                :user "nobody"
-                :add ["from" "to"]
-                :workdir "/var/opt/folder"
-                :cmd ["java " (heap 512) (port 512) " -jar artifact.jar"]]
+(d/docker-file [:from     "java:8"
+                :run      ["mkdir" "-p" "/var/opt/folder"]
+                :user     "nobody"
+                :add      ["from" "to"]
+                :workdir  "/var/opt/folder"
+                :cmd      ["java" (heap 512) (port 512) "-jar" "artifact.jar"]]
                 "path/to/dockerfile")         
 ```
 

@@ -24,13 +24,13 @@
             "USER nobody"
             "ADD from to"
             "WORKDIR /var/opt/folder"
-            "CMD java  -Xmx=512m  -Dport=512  -jar artifact.jar"]
+            "CMD java -Xmx=512m  -Dport=512 -jar artifact.jar"]
            (d/docker [:from "java:8"
                       :run ["mkdir" "-p" "/var/opt/folder"]
                       :user "nobody"
                       :add ["from" "to"]
                       :workdir "/var/opt/folder"
-                      :cmd ["java " (heap 512) (port 512) " -jar artifact.jar"]])))))
+                      :cmd ["java" (heap 512) (port 512) "-jar artifact.jar"]])))))
 
 (deftest ^:unit write-docker-file-to-disk
   (let [definition [:from "java:8"
