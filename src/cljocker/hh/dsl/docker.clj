@@ -3,19 +3,25 @@
             [clojure.test :refer :all]
             [clojure.set :refer :all]))
 
-(def DOCKER-INSTRUCTION
+(def INSTRUCTIONS
   #{:from
     :maintainer
     :run
+    :cmd
+    :label
+    :expose
     :env
     :add
-    :expose
     :copy
-    :cmd
     :entrypoint
+    :volume
     :user
     :workdir
-    :volume})
+    :arg
+    :onbuild
+    :stopsignal
+    :healthcheck
+    :shell})
 
 (defn instruction-concat [instruction v]
   (str
@@ -25,7 +31,7 @@
 
 (defn build-instruction [instruction args]
   (cond
-    (not (contains? DOCKER-INSTRUCTION instruction)) ""
+    (not (contains? INSTRUCTIONS instruction)) ""
     (vector? args) (instruction-concat instruction args)
     (function? args) (instruction-concat instruction (args))
     :else (instruction-concat instruction [args])))
@@ -42,7 +48,7 @@
        (= :from first)
        (= 0 (count (filter empty? (take-nth 2 rest))))
        (subset? (set (take-nth 2 definition))
-                DOCKER-INSTRUCTION)))
+                INSTRUCTIONS)))
 
 (defn docker
   ([definition]
