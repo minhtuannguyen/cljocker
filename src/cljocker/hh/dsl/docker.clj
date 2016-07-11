@@ -23,20 +23,20 @@
     :healthcheck
     :shell})
 
-(defn instruction-concat [instruction v]
+(defn- instruction-concat [instruction v]
   (str
    (s/upper-case (name instruction))
    " "
    (s/join " " v)))
 
-(defn build-instruction [instruction args]
+(defn- build-instruction [instruction args]
   (cond
     (not (contains? INSTRUCTIONS instruction)) ""
     (vector? args) (instruction-concat instruction args)
     (function? args) (instruction-concat instruction (args))
     :else (instruction-concat instruction [args])))
 
-(defn build [instruction args m]
+(defn- build [instruction args m]
   (let [result (build-instruction instruction args)]
     (if (empty? result)
       m
@@ -78,8 +78,9 @@
      (if (seq rest)
        (docker rest m) m))))
 
-(defn docker-file [spec path]
-  (->> spec
-       (docker)
-       (s/join "\n")
-       (spit (str path "/Dockerfile"))))
+(defn dockerfile-str [spec]
+  (s/join "\n" (docker spec)))
+
+(defn write-dockerfile! [spec path]
+  (spit (str path "/Dockerfile")
+        (dockerfile-str spec)))

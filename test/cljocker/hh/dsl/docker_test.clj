@@ -56,6 +56,7 @@
   (let [spec [:from "java:8"
               :cmd ["java " "-jar artifact.jar"]]
         path "target"
-        _ (d/docker-file spec path)]
+        _ (d/write-dockerfile! spec path)]
     (is (= "FROM java:8\nCMD java  -jar artifact.jar"
-           (slurp "target/Dockerfile")))))
+           (slurp "target/Dockerfile")
+           (d/dockerfile-str spec)))))
