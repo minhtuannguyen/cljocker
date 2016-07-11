@@ -2,22 +2,41 @@
   (:require [clojure.test :refer :all]
             [cljocker.hh.dsl.docker :as d]))
 
+(deftest ^:unit validate
+  (is (= [:valid]
+         (d/validate [:from "image" :cmd "echo"])))
+
+  (is (= [:invalid "spec is empty"]
+         (d/validate nil)))
+
+  (is (= [:invalid "some instruction has empty argument"]
+         (d/validate [:from ""])
+         (d/validate [:from "image" :cmd ""])))
+
+  (is (= [:invalid "spec is not well-formed"]
+         (d/validate [:from "image" :cmd])))
+
+  (is (= [:invalid "spec has some unknown instruction"]
+         (d/validate [:from "image" :bla "blub" :cmd "echo"])))
+
+  (is (= [:invalid "There can only be one CMD instruction"]
+         (d/validate [:from "image"])
+         (d/validate [:from "image" :cmd "echo 1" :cmd "echo 2"])))
+
+  (is (= [:invalid "first instruction must be FROM"]
+         (d/validate [:cmd "echo"])
+         (d/validate []))))
+
 (deftest ^:unit valid?
   (is (true? (d/valid? [:from "image" :cmd "echo"])))
-  (is (false? (d/valid? [:from "image"])))
-  (is (false? (d/valid? [:from ""])))
-  (is (false? (d/valid? [:from "image" :cmd])))
-  (is (false? (d/valid? [:from "image" :cmd ""])))
-  (is (false? (d/valid? [:from "image" :bla "blub"])))
-  (is (false? (d/valid? [:cmd "echo"]))))
+  (is (false? (d/valid? nil))))
 
 (defn- heap [heap] (str "-Xmx=" heap "m "))
 (defn- port [port] (str "-Dport=" port))
 
 (deftest ^:unit test-docker-dsl
-  (testing "edge cases"
-    (is (= [] (d/docker [:from])))
-    (is (= [] (d/docker []))))
+  (testing "throw exception if spec is invalid"
+    (is (thrown? IllegalArgumentException (d/docker [:from]))))
 
   (testing "happy case"
     (is (= ["FROM java:8"
@@ -34,9 +53,9 @@
                       :cmd ["java" (heap 512) (port 512) "-jar artifact.jar"]])))))
 
 (deftest ^:unit write-docker-file-to-disk
-  (let [definition [:from "java:8"
-                    :cmd ["java " "-jar artifact.jar"]]
+  (let [spec [:from "java:8"
+              :cmd ["java " "-jar artifact.jar"]]
         path "target"
-        _ (d/docker-file definition path)]
+        _ (d/docker-file spec path)]
     (is (= "FROM java:8\nCMD java  -jar artifact.jar"
            (slurp "target/Dockerfile")))))
