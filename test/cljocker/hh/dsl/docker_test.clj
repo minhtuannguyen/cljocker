@@ -3,7 +3,8 @@
             [cljocker.hh.dsl.docker :as d]))
 
 (deftest ^:unit valid?
-  (is (true? (d/valid? [:from "image"])))
+  (is (true? (d/valid? [:from "image" :cmd "echo"])))
+  (is (false? (d/valid? [:from "image"])))
   (is (false? (d/valid? [:from ""])))
   (is (false? (d/valid? [:from "image" :cmd])))
   (is (false? (d/valid? [:from "image" :cmd ""])))

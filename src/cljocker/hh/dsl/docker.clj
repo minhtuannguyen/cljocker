@@ -47,6 +47,7 @@
        (even? (count definition))
        (= :from first)
        (= 0 (count (filter empty? (take-nth 2 rest))))
+       (= 1 (count (filter #(= :cmd %) definition)))
        (subset? (set (take-nth 2 definition))
                 INSTRUCTIONS)))
 
