@@ -29,12 +29,17 @@
    " "
    (s/join " " v)))
 
-(defn- build-instruction [instruction args]
+(defn resolve-args [args]
   (cond
-    (not (contains? INSTRUCTIONS instruction)) ""
-    (vector? args) (instruction-concat instruction args)
-    (function? args) (instruction-concat instruction (args))
-    :else (instruction-concat instruction [args])))
+    (vector? args) args
+    (seq? args) (vec args)
+    (function? args) (args)
+    :else [args]))
+
+(defn- build-instruction [instruction args]
+  (if (contains? INSTRUCTIONS instruction)
+    (instruction-concat instruction (resolve-args args))
+    ""))
 
 (defn- build [instruction args m]
   (let [result (build-instruction instruction args)]

@@ -46,7 +46,7 @@
             "WORKDIR /var/opt/folder"
             "CMD java -Xmx=512m  -Dport=512 -jar artifact.jar"]
            (d/docker [:from "java:8"
-                      :run ["mkdir" "-p" "/var/opt/folder"]
+                      :run (lazy-seq ["mkdir" "-p" "/var/opt/folder"])
                       :user "nobody"
                       :add ["from" "to"]
                       :workdir "/var/opt/folder"
