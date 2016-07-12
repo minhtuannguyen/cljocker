@@ -32,8 +32,7 @@
 
 (defn- resolve [args]
   (cond
-    (vector? args) args
-    (seq? args) (vec args)
+    (or (vector? args) (seq? args)) (flatten args)
     (function? args) (args)
     :else [args]))
 

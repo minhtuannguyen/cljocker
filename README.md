@@ -21,7 +21,7 @@ A simple DSL to define and generate Dockerfile
                       :user     "nobody"
                       :add      ["from" "to"]
                       :workdir  "/var/opt/folder"
-                      :cmd      ["java" (heap 512) (port 512) "-jar" "artifact.jar"]]
+                      :cmd      ["java" (heap 512) (port 512) ["-jar" "artifact.jar"]]]
                       "path/to/dockerfile")       
 ```
 

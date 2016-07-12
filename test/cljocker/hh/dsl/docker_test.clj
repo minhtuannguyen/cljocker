@@ -50,7 +50,13 @@
                       :user "nobody"
                       :add ["from" "to"]
                       :workdir "/var/opt/folder"
-                      :cmd ["java" (heap 512) (port 512) "-jar artifact.jar"]])))))
+                      :cmd ["java" (heap 512) (port 512) ["-jar" "artifact.jar"]]])
+           (d/docker [:from "java:8"
+                      :run ["mkdir" "-p" "/var/opt/folder"]
+                      :user "nobody"
+                      :add ["from" "to"]
+                      :workdir "/var/opt/folder"
+                      :cmd ["java" (heap 512) (port 512) "-jar" "artifact.jar"]])))))
 
 (deftest ^:unit write-docker-file-to-disk
   (let [spec [:from "java:8"
