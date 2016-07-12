@@ -1,4 +1,5 @@
 (ns cljocker.hh.dsl.docker
+  (:refer-clojure :exclude [resolve])
   (:require [clojure.string :as s]
             [clojure.test :refer :all]
             [clojure.set :refer :all]))
@@ -29,23 +30,20 @@
    " "
    (s/join " " v)))
 
-(defn resolve-args [args]
+(defn- resolve [args]
   (cond
     (vector? args) args
     (seq? args) (vec args)
     (function? args) (args)
     :else [args]))
 
-(defn- build-instruction [instruction args]
+(defn- build-instruction [instruction args m]
   (if (contains? INSTRUCTIONS instruction)
-    (instruction-concat instruction (resolve-args args))
-    ""))
-
-(defn- build [instruction args m]
-  (let [result (build-instruction instruction args)]
-    (if (empty? result)
-      m
-      (conj m result))))
+    (->> args
+         (resolve)
+         (instruction-concat instruction)
+         (conj m))
+    m))
 
 (defn validate [[first & rest :as spec]]
   (cond
@@ -79,7 +77,7 @@
        (docker spec [])
        (throw (new IllegalArgumentException reason)))))
   ([[instruction args & rest] m]
-   (let [m (build instruction args m)]
+   (let [m (build-instruction instruction args m)]
      (if (seq rest)
        (docker rest m) m))))
 
