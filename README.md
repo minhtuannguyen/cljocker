@@ -10,6 +10,8 @@ A simple DSL to define and generate Dockerfile
 
 ## Examples
 
+To generate a Dockerfile from spec:
+
 ```clojure
 (:require [cljocker.hh.dsl.docker :as d])
             
@@ -34,6 +36,18 @@ USER nobody
 ADD from to
 WORKDIR /var/opt/folder
 CMD java  -Xmx=512m  -Dport=512  -jar artifact.jar    
+```
+
+To validate a dockerfile spec:
+
+```clojure
+(:require [cljocker.hh.dsl.docker :as d])
+            
+(is (= [:valid]
+       (d/validate [:from "image" :cmd "echo"])))   
+       
+(is (= [:invalid "first instruction must be FROM"]
+       (d/validate [:cmd "echo"])))
 ```
 
 
