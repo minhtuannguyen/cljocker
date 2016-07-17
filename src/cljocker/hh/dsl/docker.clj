@@ -24,11 +24,11 @@
     :healthcheck
     :shell})
 
-(defn- instruction-concat [instruction v]
+(defn- instruction-concat [instruction value]
   (str
    (s/upper-case (name instruction))
    " "
-   (s/join " " v)))
+   (s/join " " value)))
 
 (defn- resolve [args]
   (cond
@@ -44,7 +44,7 @@
          (conj m))
     m))
 
-(defn validate [[first & rest :as spec]]
+(defn- validate-spec [[first & rest :as spec]]
   (cond
     (nil? spec)
     [:invalid "spec is empty"]
@@ -66,23 +66,36 @@
 
     :else [:valid]))
 
-(defn valid? [spec]
-  (= :valid (first (validate spec))))
-
-(defn docker
+(defn- parse-docker-spec
   ([spec]
-   (let [[status reason] (validate spec)]
+   (let [[status reason] (validate-spec spec)]
      (if (= :valid status)
-       (docker spec [])
+       (parse-docker-spec spec [])
        (throw (new IllegalArgumentException reason)))))
   ([[instruction args & rest] m]
    (let [m (build-instruction instruction args m)]
      (if (seq rest)
-       (docker rest m) m))))
+       (recur rest m) m))))
 
-(defn dockerfile-str [spec]
-  (s/join "\n" (docker spec)))
+(defprotocol Dockerfile
+  (as-str [self])
+  (write! [self path])
+  (valid? [self])
+  (validate [self]))
 
-(defn write-dockerfile! [spec path]
-  (spit (str path "/Dockerfile")
-        (dockerfile-str spec)))
+(defrecord DockerfileWithSpec [spec]
+  Dockerfile
+  (as-str [_]
+    (s/join "\n" (parse-docker-spec spec)))
+
+  (write! [self path]
+    (spit (str path "/Dockerfile") (as-str self)))
+
+  (validate [_]
+    (validate-spec spec))
+
+  (valid? [self]
+    (= :valid (first (validate self)))))
+
+(defn new-dockerfile [spec]
+  (DockerfileWithSpec. spec))
