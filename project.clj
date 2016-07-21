@@ -1,6 +1,6 @@
 (defproject minhtuannguyen/cljocker "0.1.8-SNAPSHOT"
   :description "a dockerfile dsl written in clojure"
-  :url ""
+  :url "https://github.com/minhtuannguyen/cljocker"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]]
