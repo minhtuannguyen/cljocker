@@ -6,8 +6,6 @@
 
 [![Clojars Project](http://clojars.org/minhtuannguyen/cljocker/latest-version.svg)](https://clojars.org/minhtuannguyen/cljocker)
 
-[![](https://codescene.io/projects/1176/status.svg)](https://codescene.io/projects/1176/jobs/latest-successful/results)
-
 A simple DSL to define and generate Dockerfile
 
 ## Examples
